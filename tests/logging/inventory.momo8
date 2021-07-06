@@ -1,0 +1,2 @@
+[nodes]
+momo8.localdomain ansible_connection=ssh ansible_ssh_user=nhosoi ansible_ssh_pass=K1n@-Ny@n ansible_become=True

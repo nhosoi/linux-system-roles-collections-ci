@@ -1,0 +1,20 @@
+---
+- name: server tcp
+  hosts: all
+  roles:
+    - fedora.linux_system_roles.logging
+  vars:
+    logging_pki_files:
+      - ca_cert_src: ./ca.pem
+        cert_src: ./server-cert.pem
+        private_key_src: ./server-key.pem
+    logging_inputs:
+      - name: remote_input0
+        type: remote
+    logging_outputs:
+      - name: files_output
+        type: files
+    logging_flows:
+      - name: flows
+        inputs: [remote_input0]
+        outputs: [files_output]

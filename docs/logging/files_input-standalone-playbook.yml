@@ -1,0 +1,20 @@
+---
+- name: Deploying files input and configured files output
+  hosts: all
+  roles:
+    - fedora.linux_system_roles.logging
+  vars:
+    logging_inputs:
+      - name: files_input0
+        type: files
+        input_log_path: /var/log/containerA/*.log
+      - name: files_input1
+        type: files
+        input_log_path: /var/log/containerB/*.log
+    logging_outputs:
+      - name: files_output
+        type: files
+    logging_flows:
+      - name: flow
+        inputs: [files_input0, files_input1]
+        outputs: [files_output]

@@ -1,0 +1,9 @@
+---
+- name: Deploying basics input and implicit files output
+  hosts: all
+  roles:
+    - fedora.linux_system_roles.logging
+  vars:
+    logging_inputs:
+      - name: system_input
+        type: basics

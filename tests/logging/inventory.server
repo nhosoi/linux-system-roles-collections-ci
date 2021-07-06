@@ -1,0 +1,2 @@
+[nodes]
+momonga.localdomain ansible_become=True

@@ -1,0 +1,64 @@
+- name: Ensure that the role runs with complicated flows - M x N combinations
+  hosts: all
+  become: true
+
+  tasks:
+    - name: deploy config to output into local files
+      vars:
+        logging_inputs:
+          - name: system
+            type: basics
+        logging_outputs:
+          - name: localfs
+            type: files
+            state: absent
+          - name: fw_arcsight
+            type: forwards
+            severity: info
+            target: 1.1.1.1
+            udp_port: 514
+          - name: console
+            type: files
+            facility: kernel
+            path: /dev/console
+          - name: secure
+            type: files
+            facility: authpriv
+            path: /var/log/secure
+          - name: messages_exclude_oracle_audit
+            type: files
+            severity: info
+            exclude:
+              - authpriv.none
+              - cron.none
+              - mail.none
+              - local1.none
+            path: /var/log/messages
+          - name: mail
+            type: files
+            facility: mail
+            path: -/var/log/maillog
+          - name: cron
+            type: files
+            facility: cron
+            path: -/var/log/cron
+          - name: emergency
+            type: files
+            severity: emerg
+            path: :omusrmsg:*
+          - name: boot
+            type: files
+            facility: local7
+            path: /var/log/boot.log
+          - name: oracle_audit
+            type: files
+            facility: local1
+            severity: warning
+            path: /arcsight/audit.log
+        logging_flows:
+          - name: flow
+            inputs: [system]
+            outputs: [localfs, fw_arcsight, console, secure, messages_exclude_oracle_audit, mail, cron, emergency, boot, oracle_audit]
+
+      include_role:
+        name: linux-system-roles.logging

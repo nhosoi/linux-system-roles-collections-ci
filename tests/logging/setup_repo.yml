@@ -1,0 +1,16 @@
+---
+- name: Generate rhel83.repo
+  vars:
+    myrepo: |
+      [appstream]
+      name=appstream
+      gpgcheck=false
+      baseurl=http://download.devel.redhat.com/rhel-8/rel-eng/RHEL-8/latest-RHEL-8.3.0/compose/AppStream/x86_64/os/
+
+      [os]
+      name=os
+      gpgcheck=false
+      baseurl=http://download.devel.redhat.com/rhel-8/rel-eng/RHEL-8/latest-RHEL-8.3.0/compose/BaseOS/x86_64/os/
+  copy:
+    dest: /etc/yum.repos.d/rhel83.repo
+    content: "{{ myrepo }}"

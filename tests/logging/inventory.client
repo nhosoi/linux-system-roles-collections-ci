@@ -1,0 +1,2 @@
+[nodes]
+CLIENT_FQDN ansible_connection=ssh ansible_ssh_user=USER ansible_ssh_pass=PASSWORD ansible_become=True

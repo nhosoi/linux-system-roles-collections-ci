@@ -1,0 +1,53 @@
+---
+- name: server tcp
+  hosts: all
+  roles:
+    - fedora.linux_system_roles.logging
+  vars:
+    logging_pki_files:
+      - ca_cert_src: ./ca.pem
+        cert_src: ./server-cert.pem
+        private_key_src: ./server-key.pem
+    logging_inputs:
+      - name: system_input
+        type: basics
+      - name: remote_input
+        type: remote
+        tcp_ports: [514, 1514]
+        permitted_clients:
+          - client.com
+        pki_authmode: x509/name
+    logging_outputs:
+      - name: files_output
+        type: files
+    logging_flows:
+      - name: flows
+        inputs: [system_input, remote_input]
+        outputs: [files_output]
+
+- name: client tcp
+  hosts: all
+  roles:
+    - fedora.linux_system_roles.logging
+  vars:
+    logging_pki_files:
+      - ca_cert_src: ./ca.pem
+        cert_src: ./client-cert.pem
+        private_key_src: ./client-key.pem
+    logging_inputs:
+      - name: system_input
+        type: basics
+    logging_outputs:
+      - name: files_output
+        type: files
+      - name: forward_output
+        type: forwards
+        facility: local2
+        target: 111.111.111.111
+        tcp_port: 514
+        permitted_server: server.com
+        pki_authmode: x509/name
+    logging_flows:
+      - name: flows
+        inputs: [system_input]
+        outputs: [files_output, forward_output]
